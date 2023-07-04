@@ -1,30 +1,24 @@
 import { dbService } from "fbInstance";
 import { React, useState, useEffect } from "react";
 
-const Home = () => {
+const Home = ({ userInfo }) => {
     const [nweet, setNweet] = useState("");
     const [nweets, setNweets] = useState([]);
 
-    const getNweets = async () => {
-        const dbNweets = await dbService.collection("nweets").get();
-        dbNweets.forEach((document) => {
-            const nweetObject = {
-                ...document.data(),
-                id: document.id,
-            }
-            setNweets((prev) => [nweetObject, ...prev]);
-        });
-    }
-
     useEffect(() => {
-        getNweets();
+        dbService.collection("nweets").orderBy("createdAt", "desc")
+            .onSnapshot(snapshot => {
+                setNweets(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            });
     }, []);
 
     const onSubmit = async (event) => {
         event.preventDefault();
         await dbService.collection("nweets").add({
-            nweet,
-            createdAt: Date.now()
+            text: nweet,
+            createdAt: Date.now(),
+            createdBy: userInfo.uid,
+            userName: userInfo.displayName,
         });
         setNweet("");
     }
@@ -36,8 +30,6 @@ const Home = () => {
         setNweet(value);
     }
 
-    console.log(nweets);
-
     return (<>
         <form onSubmit={onSubmit}>
             <input type="text" placeholder="What's on your mind?" maxLength={120} onChange={onChange} value={nweet} />
@@ -48,7 +40,7 @@ const Home = () => {
             <ul>
                 {nweets.map(nweet => (
                     <li key={nweet.id}>
-                        <h4>{nweet.nweet}</h4>
+                        <h4>{nweet.text}</h4>
                     </li>
                 ))}
             </ul>

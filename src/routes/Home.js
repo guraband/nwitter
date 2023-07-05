@@ -1,5 +1,6 @@
 import { dbService } from "fbInstance";
 import { React, useState, useEffect } from "react";
+import Nweet from "components/Nweet"
 
 const Home = ({ userInfo }) => {
     const [nweet, setNweet] = useState("");
@@ -37,13 +38,9 @@ const Home = ({ userInfo }) => {
         </form>
 
         <div>
-            <ul>
-                {nweets.map(nweet => (
-                    <li key={nweet.id}>
-                        <h4>{nweet.text}</h4>
-                    </li>
-                ))}
-            </ul>
+            {nweets.map((nweet) => (
+                <Nweet key={nweet.id} nweet={nweet} isOwner={nweet.createdBy === userInfo.uid} />
+            ))}
         </div>
     </>
     );

@@ -16,6 +16,9 @@ const Nweet = ({ nweet, isOwner }) => {
 
     const onSubmit = async (event) => {
         event.preventDefault();
+        if (!isOwner) {
+            return;
+        }
         await dbService.doc(`nweets/${nweet.id}`).update({
             text: newNweet,
             updatedAt: Date.now(),
@@ -24,6 +27,9 @@ const Nweet = ({ nweet, isOwner }) => {
     }
 
     const onDelete = async () => {
+        if (!isOwner) {
+            return;
+        }
         const ok = window.confirm("Are you sure?");
         if (ok) {
             await dbService.doc(`nweets/${nweet.id}`).delete();

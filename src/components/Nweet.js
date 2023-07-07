@@ -44,11 +44,14 @@ const Nweet = ({ nweet, isOwner }) => {
                     <input type="submit" value="Save" />
                 </form>
                 <button onClick={toggleEditMode}>Cancel</button>
-            </> : <><h4>{nweet.text}</h4><label>{nweet.userName}</label>
+            </> : <>
+                {nweet.attachment && <img src={nweet.attachment} width={"100px"} />}
+                <h4>{nweet.text}</h4><label>{nweet.userName}</label>
                 {isOwner && <>
                     <button onClick={toggleEditMode}>수정</button>
                     <button onClick={onDelete}>삭제</button>
-                </>}</>
+                </>}
+            </>
         }
 
     </div>

@@ -5,15 +5,15 @@ import Home from "routes/Home";
 import Profile from "routes/Profile";
 import Navigation from "components/Navigation";
 
-const AppRouter = ({ isLoggedIn, userInfo }) => {
+const AppRouter = ({ isLoggedIn, userInfo, updateUserDisplayName }) => {
     return (
         <BrowserRouter>
-            {isLoggedIn && <Navigation />}
+            {isLoggedIn && <Navigation userInfo={userInfo} />}
             <Routes>
                 {isLoggedIn ? (
                     <>
                         <Route exact path="/" element={<Home userInfo={userInfo} />} />
-                        <Route exact path="/profile" element={<Profile />} />
+                        <Route exact path="/profile" element={<Profile userInfo={userInfo} updateUserDisplayName={updateUserDisplayName} />} />
                     </>) : (
                     <Route exact path="/" element={<Auth />} />
                 )}

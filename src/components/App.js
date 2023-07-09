@@ -7,12 +7,24 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
 
+  const updateUserDisplayName = (newDisplayName) => {
+    setUserInfo({
+      displayName: newDisplayName,
+      uid: userInfo.uid,
+      updateProfile: (args) => userInfo.updateProfile(args),
+    });
+  }
+
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
       // console.log(user);
       if (user) {
         setIsLoggedIn(true);
-        setUserInfo(user);
+        setUserInfo({
+          displayName: user.displayName,
+          uid: user.uid,
+          updateProfile: (args) => user.updateProfile(args),
+        });
       } else {
         setIsLoggedIn(false);
         setUserInfo(null);
@@ -21,7 +33,7 @@ function App() {
     });
   }, []);
   return <>
-    {init ? <AppRouter isLoggedIn={isLoggedIn} userInfo={userInfo} /> : "Initializing..."}
+    {init ? <AppRouter isLoggedIn={isLoggedIn} userInfo={userInfo} updateUserDisplayName={updateUserDisplayName} /> : "Initializing..."}
     <footer>&copy; {new Date().getFullYear()} Nwitter</footer>
   </>;
 }

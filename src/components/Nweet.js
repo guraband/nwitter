@@ -1,5 +1,7 @@
 import { dbService, storageService } from "fbInstance";
 import { React, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 
 const Nweet = ({ nweet, isOwner }) => {
     const [isEditMode, setIsEditMode] = useState(false);
@@ -33,24 +35,35 @@ const Nweet = ({ nweet, isOwner }) => {
         const ok = window.confirm("Are you sure?");
         if (ok) {
             await dbService.doc(`nweets/${nweet.id}`).delete();
-            await storageService.refFromURL(nweet.attachment).delete();
+            if (nweet.attachment) {
+                await storageService.refFromURL(nweet.attachment).delete();
+            }
         }
     }
 
-    return <div>
+    return <div className="nweet">
         {
             isEditMode ? <>
-                <form onSubmit={onSubmit}>
-                    <input type="text" placeholder="What's on your mind?" maxLength={120} onChange={onChange} value={newNweet} />
-                    <input type="submit" value="Save" />
+                <form onSubmit={onSubmit} className="container nweetEdit">
+                    <input type="text" placeholder="What's on your mind?" maxLength={120} onChange={onChange} value={newNweet}
+                        required autoFocus className="formInpur" />
+                    <input type="submit" value="Save" className="formBtn" />
                 </form>
-                <button onClick={toggleEditMode}>Cancel</button>
+                <span onClick={toggleEditMode} className="formBtn cancelBtn">
+                    Cancel
+                </span>
             </> : <>
-                {nweet.attachment && <img src={nweet.attachment} width={"100px"} />}
+                {nweet.attachment && <img src={nweet.attachment} />}
                 <h4>{nweet.text}</h4><label>{nweet.userName}</label>
                 {isOwner && <>
-                    <button onClick={toggleEditMode}>수정</button>
-                    <button onClick={onDelete}>삭제</button>
+                    <div class="nweet__actions">
+                        <span onClick={onDelete}>
+                            <FontAwesomeIcon icon={faTrash} />
+                        </span>
+                        <span onClick={toggleEditMode}>
+                            <FontAwesomeIcon icon={faPencilAlt} />
+                        </span>
+                    </div>
                 </>}
             </>
         }

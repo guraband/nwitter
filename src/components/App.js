@@ -34,7 +34,9 @@ function App() {
   }, []);
   return <>
     {init ? <AppRouter isLoggedIn={isLoggedIn} userInfo={userInfo} updateUserDisplayName={updateUserDisplayName} /> : "Initializing..."}
-    <footer>&copy; {new Date().getFullYear()} Nwitter</footer>
+    <div style={{ textAlign: "center", marginBottom: "30px" }}>
+      &copy; {new Date().getFullYear()} Nwitter
+    </div>
   </>;
 }
 

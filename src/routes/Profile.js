@@ -42,12 +42,23 @@ export default ({ userInfo, updateUserDisplayName }) => {
         getMyNweets();
     }, []);
 
-    return <>
-        <form onSubmit={onSubmit}>
-            <input type="text" placeholder="New DisplayName" maxLength={20} onChange={onChange} value={newDisplayName} />
-            <input type="submit" value="Update" />
-        </form>
-        <span>Profile</span>
-        <button onClick={onLogout}>Log Out</button>
-    </>
+    return (
+        <div className="container">
+            <form onSubmit={onSubmit} className="profileForm">
+                <input type="text" placeholder="New DisplayName" maxLength={20} onChange={onChange} value={newDisplayName}
+                    autoFocus className="formInput" />
+                <input
+                    type="submit"
+                    value="Update Profile"
+                    className="formBtn"
+                    style={{
+                        marginTop: 10,
+                    }}
+                />
+            </form>
+            <span className="formBtn cancelBtn logOut" onClick={onLogout}>
+                Log Out
+            </span>
+        </div>
+    )
 };
